@@ -1,0 +1,117 @@
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#define CI(s) scanf("%d",&s);
+#define mx 100000+5
+using namespace std;
+int tree_value[3*mx];
+int tree_prop[3*mx];
+void update(int node,int b,int e,int i,int j,int x)
+{
+    if(j<b||i>e)
+    return;
+    if(b>=i&&e<=j)
+    {
+        tree_value[node]=(e-b+1)*x;
+        tree_prop[node]=x;
+        return;
+    }
+    int left,right,mid;
+    left=node<<1;
+    right=(node<<1)+1;
+    mid=(b+e)/2;
+
+    if(tree_prop[node]!=-1)
+    {
+        tree_value[left]=(mid-b+1)*tree_prop[node];
+         tree_value[right]=(e-mid)*tree_prop[node];
+        tree_prop[left]=tree_prop[node];
+        tree_prop[right]=tree_prop[node];
+        tree_prop[node]=-1;
+    }
+   update(left,b,mid,i,j,x);
+   update(right,mid+1,e,i,j,x);
+   tree_value[node]=tree_value[left]+tree_value[right];
+
+
+}
+int query(int node,int b,int e,int i,int j)
+{
+    if(i>e||b>j)
+    return 0;
+    if(b>=i&&e<=j)
+    return tree_value[node];
+    int left,right,mid;
+    left=(node<<1);
+    right=(node<<1)+1;
+    mid=(b+e)/2;
+    if(tree_prop[node]!=-1)
+    {
+        tree_value[left]=(mid-b+1)*tree_prop[node];
+        tree_value[right]=(e-mid)*tree_prop[node];
+        tree_prop[left]=tree_prop[node];
+        tree_prop[right]=tree_prop[node];
+        tree_prop[node]=-1;
+    }
+    int p1=query(left,b,mid,i,j);
+    int p2=query(right,mid+1,e,i,j);
+    return  p1+p2;
+
+
+}
+int gcd(int a,int b)
+{
+    if(b==0)
+    return a;
+    return gcd(b,a%b);
+}
+int main()
+{
+    int t,kase=1;
+    CI(t);
+   while(t--)
+   {
+       memset(tree_value,0,sizeof tree_value);
+       memset(tree_prop,-1,sizeof tree_prop);
+       int n,q;
+       CI(n);
+       CI(q);
+       cout<<"Case "<<kase++<<":\n";
+       for(int i=1;i<=q;i++)
+       {
+           int order;
+           CI(order);
+           if(order==1)
+           {
+               int i,j,x;
+               CI(i);
+               CI(j);
+               CI(x);
+               update(1,1,n,i+1,j+1,x);
+
+           }
+           else if(order==2)
+           {
+               int i,j,x;
+               CI(i);
+               CI(j);
+               int a=query(1,1,n,i+1,j+1);
+               int b=j-i+1;
+               int g=gcd(a,b);
+               a=a/g;
+               b=b/g;
+               if(b==1)
+               {
+                   cout<<a<<"\n";
+               }
+               else
+               {
+                   cout<<a<<"/"<<b<<"\n";
+               }
+           }
+
+       }
+   }
+}
+

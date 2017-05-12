@@ -1,0 +1,37 @@
+void bfs(int src_r,int src_c)
+{
+    int ur,uc,vr,vc;
+    queue<int>Q;
+    Q.push(src_r);
+    Q.push(src_c);
+    d[src_r][src_c]=0;
+    taken[src_r][src_c]=1;
+    while(!Q.empty())
+    {
+        ur=Q.front();
+        Q.pop();
+        uc=Q.front();
+        Q.pop();
+        for(int i=0; i<4; i++)
+        {
+            vr=ur+dr[i];
+            vc=uc+dc[i];
+            if(taken[vr][vc]==0&&valid(vr,vc)==1)
+            {
+                taken[vr][vc]=1;
+               d[vr][vc]=d[ur][uc]+1;
+                if(vr==des_r&&vc==des_c)
+                return;
+                Q.push(vr);
+                Q.push(vc);
+ 
+            }
+ 
+ 
+        }
+ 
+ 
+ 
+    }
+ 
+}

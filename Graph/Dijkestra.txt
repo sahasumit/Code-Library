@@ -1,0 +1,100 @@
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<vector>
+#include<map>
+#include<queue>
+#define ll long long
+#define inf (10e12)+5
+#define maxi 100005
+using namespace std;
+struct node
+{
+    ll city,cost;
+    bool operator <(const node& p)const
+    {
+        return cost>p.cost;
+    }
+};
+
+vector<ll>G[maxi],dis[maxi];
+ll d[maxi];
+ll path[maxi];
+ll djs(ll src,ll des)
+{
+    for(ll i=0; i<maxi; i++)
+        d[i]=inf,path[i]=-1;
+        d[src]=0;
+    node a;
+    a.city=src,a.cost=0;
+    priority_queue<node>Q;
+    Q.push(a);
+    while(!Q.empty())
+    {
+        a=Q.top();
+        Q.pop();
+        ll u=a.city;
+          if(des==u)
+          {
+             // puts("ffffffffff");
+               return d[u];
+
+          }
+
+        for(ll i=0;i<G[u].size();i++)
+        {
+
+            ll v=G[u][i];
+          //  cout<<v<<" ";
+           //cout<<d[u]<<" "<<dis[u][i]<<endl;
+            if(d[u]+dis[u][i]<d[v])
+            {
+                 //puts("ffffffffff");
+
+                d[v]=d[u]+dis[u][i];
+                path[v]=u;
+                a.city=v;
+                a.cost=d[v];
+                Q.push(a);
+
+            }
+
+
+
+        }
+
+    }
+    return -1;
+}
+void func(ll v)
+{
+    if(v==-1)
+        return ;
+    ll u=path[v];
+    func(u);
+    cout<<v<<" ";
+}
+int main()
+{
+    ll n,e,u,v,w;
+    cin>>n>>e;
+    for(ll i=0; i<e; i++)
+    {
+        cin>>u>>v>>w;
+        G[u].push_back(v);
+        G[v].push_back(u);
+        dis[u].push_back(w);
+        dis[v].push_back(w);
+
+    }
+   ll ans=djs(1,n);
+   if(ans==-1)
+    cout<<ans<<endl;
+    else
+    {
+        func(n);
+        puts("");
+    }
+
+
+}

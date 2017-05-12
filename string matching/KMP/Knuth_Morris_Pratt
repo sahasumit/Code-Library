@@ -1,0 +1,45 @@
+int Knuth_Morris_Pratt(string text,string pattern)
+{
+    int ans=0;
+    int n=text.size();
+    int m=pattern.size();
+    // let n be the size of the text, m the
+    // size of the pattern, and F[] - the
+    // "failure function"
+
+    //build_failure_function(pattern[]);
+
+    int  i = 0; // the initial state of the automaton is
+    // the empty string
+
+    int j = 0; // the first character of the text
+
+    for( ; ; )
+    {
+        if(j == n) break; // we reached the end of the text
+
+        // if the current character of the text "expands" the
+        // current match
+        if(text[j] == pattern[i])
+        {
+            i++; // change the state of the automaton
+            j++; // get the next character from the text
+            if(i == m) // match found
+                ans++;
+        }
+
+        // if the current state is not zero (we have not
+        // reached the empty string yet) we try to
+        // "expand" the next best (largest) match
+        else if(i > 0) i = F[i];
+
+        // if we reached the empty string and failed to
+        // "expand" even it; we go to the next
+        // character from the text, the state of the
+        // automaton remains zero
+        else j++;
+    }
+    return ans;
+}
+
+

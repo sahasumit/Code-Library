@@ -1,0 +1,19 @@
+
+//prime genrator sieve
+
+bool statue[max];
+vector<long long>prime;
+void sieve()
+{
+    memset(statue,true,sizeof statue);
+    for(unsigned long long i=3; i*i<=max; i+=2)
+        if(statue[i]==true)
+            for(unsigned long long j=i*i; j<=max; j+=i+i)
+                statue[j]=false;
+    prime.push_back(2);
+    for(unsigned long long i=3; i<=max; i+=2)
+        if(statue[i]==true)
+            prime.push_back(i);
+
+
+}

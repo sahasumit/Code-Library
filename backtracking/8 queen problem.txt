@@ -1,0 +1,142 @@
+#include<iostream>
+#include<stdio.h>
+#include<string>
+#include<string.h>
+#include<math.h>
+#include<stdlib.h>
+using namespace std;
+int a,b,x[10],line;
+bool valid(int row,int queen)
+{
+    for(int col=1;col<queen;col++)
+        if(x[col]==row||(abs(x[col]-row)==abs(col-queen)))
+            return false;
+        return true;
+}
+int rec(int queen)
+{
+    for(int row=1;row<=8;row++)
+        if(valid(row,queen)==true)
+        {
+            x[queen]=row;
+            if(queen==8&&x[b]==a)
+            {
+                printf("%2d      %d",line++,x[1]);
+                for(int j=2;j<=8;j++)
+                    cout<<" "<<x[j];
+                    puts("");
+            }
+            else
+                rec(queen+1);
+
+
+        }
+
+
+}
+int main()
+{
+    int t;
+
+    cin>>t;
+    while(t--)
+    {
+        line=1;
+        memset(x,0,sizeof x);
+        cin>>a>>b;
+        puts("SOLN       COLUMN");
+        puts(" #      1 2 3 4 5 6 7 8\n");
+
+
+        rec(1);
+        if(t)
+            puts("");
+
+
+    }
+}
+////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<string>
+#include<vector>
+#include<stdlib.h>
+using namespace std;
+//vector<int>V;
+int grid[10][10];
+int x[10],V[10];
+int ans,k=0;
+int dp[100][100];
+bool valid(int row,int queen)
+{
+    for(int col=1;col<queen;col++)
+        if(x[col]==row||(abs(x[col]-row)==abs(col-queen)))
+            return false;
+        return true;
+}
+int rec(int queen)
+{
+    for(int row=1;row<=8;row++)
+        if(valid(row,queen)==true)
+        {
+            x[queen]=row;
+            if(queen==8)
+            {
+                for(int j=1;j<=8;j++)
+                    dp[k][j]=x[j];
+
+                 k++;
+
+            }
+            else
+                rec(queen+1);
+
+
+        }
+
+
+}
+
+int main()
+{
+     memset(x,0,sizeof x);
+     rec(1);
+    int temp;
+    int kase=1;
+    while(cin>>temp)
+    {
+
+        memset(V,0,sizeof V);
+         ans=10000;
+       // V.clear();
+        V[1]=temp;
+        for(int i=2;i<=8;i++)
+        {
+           cin>>V[i];
+        }
+        /////////////
+       for(int i=0;i<k;i++)
+         {
+             int c=0;
+             for(int j=1;j<=8;j++)
+             {
+                 if(V[j]!=dp[i][j])
+                    c++;
+             }
+             ans=min(c,ans);
+
+
+          }
+
+
+        /////////
+        cout<<"Case "<<kase++<<": ";
+        cout<<ans<<endl;
+
+    }
+
+
+}
+

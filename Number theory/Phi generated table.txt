@@ -1,0 +1,19 @@
+
+//generating phi table
+
+unsigned long long phi[max];
+void phi_table()
+{
+    for(int i=2; i<=max; i++)
+    phi[i]=0;
+    phi[1]=1;
+    for(int i=2; i<=max; i++)
+        if(!phi[i])
+            for(int j=i; j<=max; j+=i)
+            {
+                if(!phi[j])
+                    phi[j]=j;
+                phi[j]=(phi[j]*(i-1))/i;
+            }
+
+}

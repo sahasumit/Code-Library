@@ -1,0 +1,93 @@
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+
+//.............disjoin set function.................//
+
+//DISJOINED SET:
+
+//////////////////////////////
+int par[10005];
+int find(int r)
+{
+    if(par[r]==r)
+        return r;
+    else
+        return par[r]=find(par[r]);
+}
+void Union(int a,int b)
+{
+    int u=find(a);
+    int v=find(b);
+    if(u==v)
+        return;
+    par[u]=v;
+}
+void makeset(int n)
+{
+    par[n]=n;
+
+}
+
+
+//....builing structure with operator overloading
+//
+struct data
+{
+  int u,v,w;
+  bool operator < (const data &p)const
+  {
+        return w<p.w;
+  }
+};
+vector<data>G;
+long long mst_kruskal(int node)
+{
+      sort(G.begin(),G.end());
+      long long ans=0,taken=0;
+
+//-----------making parent of all node------//
+      for(int i=1;i<=node;i++)
+      makeset(i);
+// puts("fucking");
+// cout<<G.size()<<"\n";
+      for(int i=0;i<G.size();i++)
+      {
+
+            int u=find(G[i].u);
+            int v=find(G[i].v);
+            if(u!=v)
+            {
+                  par[u]=v;
+                  taken++;
+                  ans+=G[i].w;
+                  if(taken==node-1)
+                  break;
+
+            }
+      }
+      return ans;
+
+}
+int main()
+{
+      int node,edge;
+      cin>>node>>edge;
+      for(int i=1;i<=edge;i++)
+      {
+            int a,b,c;
+            cin>>a>>b>>c;
+            data temp;
+            temp.u=a;
+            temp.v=b;
+            temp.w=c;
+            G.push_back(temp);
+
+      }
+cout<<mst_kruskal(node)<<"\n";
+}
+

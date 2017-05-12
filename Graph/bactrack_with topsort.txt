@@ -1,0 +1,51 @@
+vector<char>element;
+int n;
+bool dep[1000][1000];
+int indegree[1000];
+bool taken[1000];
+vector<char>result;
+void backtrack()
+{
+  //  puts("fuck");
+    if(result.size()==n)
+    {
+        for(int i=0; i<n; i++)
+            cout<<result[i];
+        puts("");
+        return;
+    }
+
+    for(int i=0; i<n; i++)
+    {
+        char ch=element[i];
+        int b=ch-'a';
+        if(!taken[b]&&!indegree[b])
+        {
+
+            //cout<<ch<<" ";
+            taken[b]=true;
+            result.push_back(ch);
+            for(int k=0; k<n; k++)
+                if(!taken[element[k]-'a']&&dep[b][element[k]-'a'])
+
+                    indegree[element[k]-'a']--;
+
+            backtrack();
+
+            taken[b]=false;
+            result.pop_back();
+            for(int k=0; k<n; k++)
+                if(!taken[element[k]-'a']&&dep[b][element[k]-'a'])
+
+                    indegree[element[k]-'a']++;
+
+
+
+
+        }
+
+
+
+    }
+
+}

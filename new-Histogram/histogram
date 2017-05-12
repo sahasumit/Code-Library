@@ -1,0 +1,98 @@
+#include<iostream>
+#include<string.h>
+#include<stdio.h>
+#include<stdlib.h>
+#define m 30005
+#define ci(a) scanf("%d",&a)
+using namespace std;
+struct sumit
+{
+    int value,index;
+};
+sumit tree[3*m];
+int ar[m];
+
+void init(int node,int b,int e)
+{
+    if(b==e)
+    {
+        tree[node].value=ar[b];
+        tree[node].index=b;
+        return;
+    }
+    int left,right,mid;
+    left=(node<<1);
+    right=(node<<1)+1;
+    mid=(b+e)/2;
+    init(left,b,mid);
+    init(right,mid+1,e);
+    if(tree[left].value<tree[right].value)
+    {
+        tree[node].value=tree[left].value;
+        tree[node].index=tree[left].index;
+
+    }
+    else
+    {
+        tree[node].value=tree[right].value;
+        tree[node].index=tree[right].index;
+
+    }
+
+
+}
+sumit tem;
+
+sumit query(int node,int b,int e,int x,int y)
+{
+    tem.value=(1<<30);
+    if(x>e||b>y)
+        return tem;
+    if(b>=x&&e<=y)
+        return tree[node];
+
+    int left,right,mid;
+    left=(node<<1);
+    right=(node<<1)+1;
+    mid=(b+e)/2;
+    sumit p1=query(left,b,mid,x,y);
+    sumit p2=query(right,mid+1,e,x,y);
+    if(p1.value<p2.value)
+        return p1;
+    else
+        return p2;
+}
+int n;
+//int dp[m][m];
+int rec(int s,int e)
+{
+    if(s>e)
+        return 0;
+    sumit temp=query(1,1,n,s,e);
+    int ans=(e-s+1)*temp.value;
+
+    ans=max(ans,max(rec(s,temp.index-1),rec(temp.index+1,e)));
+    return ans;
+}
+
+int main()
+{
+    int t,kase=1;
+    ci(t);
+    while(t--)
+    {
+
+        ci(n);
+        for(int i=1; i<=n; i++)
+            ci(ar[i]);
+        init(1,1,n);
+//        sumit a=query(1,1,n,1,n);
+//        cout<<a.value<<" "<<a.index<<"\n";
+//        cout<<tree[1].value<<" "<<tree[1].index<<"\n";
+        int ans=rec(1,n);
+        cout<<"Case "<<kase++<<": "<<ans<<"\n";
+
+    }
+
+}
+

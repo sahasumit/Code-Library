@@ -1,0 +1,28 @@
+
+///////////////////////////////
+////////////////////////////////
+
+DISJOINED SET:
+
+//////////////////////////////
+
+int find(int r)
+{
+    if(par[r]==r)
+        return r;
+    else
+        return par[r]=find(par[r]);
+}
+void Union(int a,int b)
+{
+    int u=find(a);
+    int v=find(b);
+    if(u==v)
+        return;
+    par[u]=v;
+}
+void makeset(int n)
+{
+    par[n]=n;
+
+}

@@ -1,0 +1,183 @@
+/******************************/
+/**      SUMIT SAHA       **/
+/**<< University Of Chittagong, BD >>/
+/**   CSE 12th batch(11-12)    **/
+/******************************/
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <set>
+#include <map>
+#include <queue>
+#include <stack>
+#include <list>
+#include <algorithm>
+using namespace std;
+
+#define nln        puts("")                         ///printnewline
+#define getint(a)  scanf("%d",&a);
+#define max3(a,b,c) max(a,max(b,c))                  ///3 ta theke max
+#define min3(a,b,c) min(a,min(b,c))                  ///3 ta theke min
+
+#define FOR1(i,n)  for(i=1;i<=n;i++)
+#define FOR0(i,n)  for(i=0;i<n;i++)                 ///looping
+#define FORR(i,n)  for(i=n-1;i>=0;i--)
+#define ALL(p)     p.begin(),p.end()
+
+#define SET(p)     memset(p,-1,sizeof(p))
+#define CLR(p)     memset(p,0,sizeof(p))            ///memset
+#define MEM(p,v)   memset(p,v,sizeof(p))
+
+#define READ(f)    freopen(f, "r", stdin)           /// file
+#define WRITE(f)   freopen(f, "w", stdout)
+
+#define SZ(c)      (int)c.size()
+#define PB(x)      push_back(x)                     ///STL defines
+#define MP(x,y)    make_pair(x,y)
+#define ff         first
+#define ss         second
+
+#define LI         long int
+#define LLI        long long int
+#define f64        long double
+#define PI         acos(-1.0)                        ///PI er value
+
+int Set(int N,int pos) {
+    return N=N | (1<<pos);
+}
+int reset(int N,int pos) {
+    return N= N & ~(1<<pos);
+}
+bool check(int N,int pos) {
+    return (bool)(N & (1<<pos));
+}
+void CI(int &_x) {
+    scanf("%d",&_x);
+}
+
+void CO(int &_x) {
+    cout<<_x;
+}
+
+template<typename T> void getarray(T a[],int n) {
+    for(int i=0; i<n; i++) cin>>a[i];
+}
+template<typename T> void printarray(T a[],int n) {
+    for(int i=0; i<n-1; i++) cout<<a[i]<<" ";
+    cout<<a[n-1]<<endl;
+}
+
+const double EPS=1e-9;                              ///constatnts
+const int INF=0x7f7f7f7f;
+
+int dr8[8]= {1,-1,0,0,1,-1,-1,1};            ///8 direction move
+int dc8[8]= {0,0,-1,1,1,1,-1,-1};
+int dr4[4]= {0,0,1,-1};                      ///4 direction move
+int dc4[4]= {-1,1,0,0};                      ///or adjacent dir.
+int kn8r[8]= {1,2,2,1,-1,-2,-2,-1};          ///knight moves
+int kn8c[8]= {2,1,-1,-2,-2,-1,1,2};
+//________________________??________________________________________________
+#define mx 1000006
+LLI tree_value[mx*3];
+LLI tree_prop[3*mx];
+void update(int node,int b,int e,int i,int j,int x) {
+    if(j<b||i>e)
+        return;
+    if(b>=i&&e<=j) {
+        tree_value[node]+=(e-b+1)*x;
+        tree_prop[node]+=x;
+        return;
+
+    }
+    int left,right,mid;
+    left=(node<<1);
+    right=(node<<1)+1;
+    mid=(b+e)/2;
+    if(tree_prop[node]!=0) {
+        tree_value[left]+=(mid-b+1)*tree_prop[node];
+        tree_value[right]+=(e-mid)*tree_prop[node];
+        tree_prop[left]+=tree_prop[node];
+        tree_prop[right]+=tree_prop[node];
+        tree_prop[node]=0;
+    }
+
+    update(left,b,mid,i,j,x);
+    update(right,mid+1,e,i,j,x);
+    tree_value[node]=tree_value[left]+tree_value[right];
+
+}
+LLI query(int node,int b,int e,int i,int j) {
+    if(j<b||i>e)
+        return 0;
+    if(b>=i&&e<=j) {
+        return tree_value[node];
+
+    }
+    int left,right,mid;
+    left=(node<<1);
+    right=(node<<1)+1;
+    mid=(b+e)/2;
+
+    if(tree_prop[node]!=0) {
+        tree_value[left]+=(mid-b+1)*tree_prop[node];
+        tree_value[right]+=(e-mid)*tree_prop[node];
+        tree_prop[left]+=tree_prop[node];
+        tree_prop[right]+=tree_prop[node];
+        tree_prop[node]=0;
+    }
+    LLI p1=query(left,b,mid,i,j);
+    LLI p2=query(right,mid+1,e,i,j);
+
+
+
+    return p1+p2;
+
+}
+int main() {
+    //READ("input.txt");
+    //WRITE("output.txt");
+    int t,kase=1;
+    CI(t);
+    while(t--) {
+        memset(tree_value,0,sizeof tree_value);
+        memset(tree_prop,0,sizeof tree_prop);
+        int n,q;
+        CI(n);
+        CI(q);
+        cout<<"Case "<<kase++<<":\n";
+        for(int i=1; i<=q; i++) {
+
+            int order;
+            CI(order);
+            if(order==0) {
+                int i,j,v;
+                CI(i);
+                CI(j);
+                CI(v);
+                update(1,1,n,i+1,j+1,v);
+
+
+            } else if(order==1) {
+
+                int i,j;
+                CI(i);
+                CI(j);
+                cout<<query(1,1,n,i+1,j+1)<<'\n';
+
+            }
+
+
+
+        }
+
+    }
+    return 0;
+}
+

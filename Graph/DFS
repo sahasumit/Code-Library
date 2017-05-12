@@ -1,0 +1,27 @@
+void dfs_visit(int u)
+{
+    colour[u]=gray;
+    _time+=1;
+    d[u]=_time;
+    for(int i=0; i<G[u].size(); i++)
+    {
+        int v=G[u][i];
+        if(colour[v]==white)
+            dfs_visit(v);
+    }
+    colour[u]=black;
+    _time+=1;
+    f[u]=_time;
+}
+void dfs()
+{
+    for(int i=1; i<=node; i++)
+        colour[i]=white;
+    _time=0;
+    for(int i=1; i<=node; i++)
+        if(colour[i]==white)
+        {
+            dfs_visit(i);
+        }
+
+}

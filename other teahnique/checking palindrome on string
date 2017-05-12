@@ -1,0 +1,20 @@
+
+void calcPalindroms()
+{
+    //s is the string
+    // calculating state dp
+    for(int i = 0; i < n; i ++)
+        dp[i][0] = dp[i][1] = true;
+    for(int i = 2; i <= n; i ++)
+        for(int j = 0; j <= n-i; j ++)
+        {
+            dp[j][i] = (dp[j+1][i-2] && s[j] == s[j+i-1]);
+        }
+}
+
+inline bool isPalindrome(int a, int b)
+{
+    //checking index to index palindrome
+    return dp[a][b-a+1];
+}
+

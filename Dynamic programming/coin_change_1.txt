@@ -1,0 +1,49 @@
+//coin change (recursive)
+// how many ways to make the money using coins
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int coin[5]= {50,25,10,5,1};
+int dp[7500][6];
+int func(int value,int i)
+{
+    if(i>=5)
+        return 0;
+    if(value<0)
+        return 0;
+    if(value==0)
+        return 1;
+    if(dp[value][i]!=-1)
+        return dp[value][i];
+    return dp[value][i]=func(value-coin[i],i)+func(value,i+1);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//taking a coin for a fixed number  how many ways to make the money using coins
+
+int n;
+int coin[55],taken[55];
+int dp[55][1005];
+int func(int i,int value)
+{
+    if(value==0)
+        return 1;
+    if(value<0)
+        return 0;
+    if(i>n)
+        return 0;
+        int ret=0;
+        if(dp[i][value]!=-1)
+            return dp[i][value];
+    for(int j=1;j<=taken[i];j++)
+    {
+        if(value-(coin[i]*j)>=0)
+            ret+=func(i+1,value-(coin[i]*j))%mod;
+        else
+            break;
+    }
+    ret+=func(i+1,value);
+    return dp[i][value]=ret%mod;
+
+}

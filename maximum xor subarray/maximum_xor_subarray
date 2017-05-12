@@ -1,0 +1,58 @@
+
+//-----------------------------maximum xor subarray------------------
+#define mx 107
+#define LLI_BITS 64
+#define LLI_MIN 0
+// Function to return maximum XOR subset in set[]
+LLI ar[mx];
+LLI maxSubarrayXOR (LLI n)
+{
+//n is number of array element
+    // Initialize index of chosen elements
+    LLI index = 0;
+
+    // Traverse through all bits of LLIeger starting from
+    // the most significant bit (MSB)
+    for (LLI i=LLI_BITS-1; i>=0; i--)
+    {
+        // Initialize index of maximum element and the maximum element
+        LLI maxInd = index, maxEle = LLI_MIN;
+        for (LLI j=index; j<n; j++)
+        {
+             // If i'th bit of ar[j] is ar and ar[j] is greater
+             // than max so far.
+             if ( (ar[j]&(1ll<<i))!= 0 && ar[j]>maxEle )
+                maxEle = ar[j], maxInd = j;
+        }
+
+        // If there was no element with i'th bit ar, move to smaller i
+        if (maxEle == LLI_MIN)
+           continue;
+
+        // Put maximum element with i'th bit ar at index 'index'
+        swap(ar[index], ar[maxInd]);
+
+        // Update maxInd and increment index
+        maxInd = index;
+
+        // Do XOR of ar[maxIndex] with all numbers having i'th
+        // bit as ar.
+        for (LLI j=0; j<n; j++)
+        {
+            // XOR ar[maxInd] those numbers which have the i'th
+            // bit ar
+            if ((j!=maxInd) && ((ar[j] & (1ll<<i)) !=0))
+                ar[j] = ar[j]^ar[maxInd];
+        }
+
+        // Increment index of chosen elements
+        index++;
+    }
+
+    // Final result is XOR of all elements
+    LLI res = 0;
+    for (LLI i=0; i<n; i++)
+        res ^= ar[i];
+    return res;
+}
+//-------------------------------------------------------------

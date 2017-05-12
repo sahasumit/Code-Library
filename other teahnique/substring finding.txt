@@ -1,0 +1,34 @@
+
+
+//finding substring of a string
+
+
+vector<string> find_substring(string a)
+{
+    vector<string>V;
+
+    map<string,int>mp;
+     string b;
+    int l=a.size();
+    for(int i=0; i<l; i++)
+        for(int j=i; j<l; j++)
+        {
+
+
+            for(int k=i; k<=j; k++)
+                b.push_back(a[k]);
+
+            if(mp.find(b)==mp.end())
+            {
+                mp[b]=1;
+                V.push_back(b);
+
+            }
+
+            b.clear();
+
+
+        }
+    return V;
+
+}

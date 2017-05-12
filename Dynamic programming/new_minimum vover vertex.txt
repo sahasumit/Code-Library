@@ -1,0 +1,70 @@
+#include<iostream>
+#include<stdlib.h>
+#include<string.h>
+#include<vector>
+#include<stdio.h>
+#define m 100000+5
+using namespace std;
+int node;
+vector<int>G[m];
+void read()
+{
+    cin>>node;
+    for(int i=0; i<node-1; i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+
+}
+int dp[m][3];
+
+int go(int cur_node,int guard,int pre_node)
+{
+    if(G[cur_node].size()==1&&G[cur_node][0]==pre_node)
+    {
+        if(guard==0)
+        return 0;
+        if(guard==1)
+        return 1;
+    }
+    int sz=G[cur_node].size();
+    int &ans=dp[cur_node][guard];
+    if(ans!=-1)
+    return ans;
+    ans=0;
+   for(int i=0;i<sz;i++)
+   {
+       int v=G[cur_node][i];
+       if(v==pre_node)
+       continue;
+       if(guard==0)
+       {
+           ans+=go(v,1,cur_node);
+
+       }
+       else if(guard==1)
+       {
+          ans+=min(go(v,1,cur_node),go(v,0,cur_node));
+
+       }
+
+   }
+   ans+=guard;
+   return ans;
+
+}
+void process()
+{
+    memset(dp,-1,sizeof dp);
+    cout<<min(go(1,0,0),go(1,1,0))<<"\n";
+}
+int main()
+{
+    read();
+    process();
+
+}
+

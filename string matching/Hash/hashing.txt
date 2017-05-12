@@ -1,0 +1,115 @@
+LLI bigmod(LLI a,LLI b,LLI mod)
+{
+    if(b==0)return 1;
+    if(b%2)
+    {
+
+        return (a*bigmod(a,b-1,mod))%mod;
+
+    }
+    else
+    {
+
+        LLI temp=bigmod(a,b/2,mod);
+        return (temp*temp)%mod;
+
+    }
+
+}
+LLI inverse_mod(LLI a,LLI mod)
+{
+    return bigmod(a,mod-2,mod);
+
+}
+LLI base1 = 87, base2 = 83;
+
+LLI mod1=1000000007ll,mod2=1000000009ll;
+#define mx 200007
+LLI pp[2][mx+5];
+
+void hashing_precalculation()
+{
+    pp[0][0]=pp[1][0]=1;
+    FOR1(i,mx)
+    {
+        pp[0][i]=(pp[0][i-1]*base1)%mod1;
+        pp[1][i]=(pp[1][i-1]*base2)%mod2;
+    }
+
+}
+int get(char c)
+{
+    if(c >= 'a' && c <= 'z') return c - 'a';
+    else if(c >= 'A' && c <= 'Z') return 26 + c - 'A';
+    else return 52 + c - '0';
+}
+LLI hsh_1[2][mx+5];
+void make_hash_1( string str )
+{
+    int sz=str.size();
+    for(int i=0; i<sz; i++)
+    {
+        hsh_1[0][i]=(get(str[i])*pp[0][i])%mod1;
+        hsh_1[1][i]=(get(str[i])*pp[1][i])%mod2;
+        if(i>0)
+        {
+            hsh_1[0][i]=(hsh_1[0][i]+hsh_1[0][i-1])%mod1;
+            hsh_1[1][i]=(hsh_1[1][i]+hsh_1[1][i-1])%mod2;
+        }
+    }
+
+}
+
+
+LLI hsh_2[2][mx+5];
+void make_hash_2(string str)
+{
+    int sz=str.size();
+    for(int i=0; i<sz; i++)
+    {
+        hsh_2[0][i]=(get(str[i])*pp[0][i])%mod1;
+        hsh_2[1][i]=(get(str[i])*pp[1][i])%mod2;
+        if(i>0)
+        {
+            hsh_2[0][i]=(hsh_2[0][i]+hsh_2[0][i-1])%mod1;
+            hsh_2[1][i]=(hsh_2[1][i]+hsh_2[1][i-1])%mod2;
+        }
+    }
+}
+bool checking_hsh(int st1,int len1,int st2,int len2)
+{
+    if(len1!=len2)return 0;
+
+    LLI f1,f2,s1,s2;
+
+    f1=hsh_1[0][st1+len1-1];
+    if(st1>0)f1=(f1-hsh_1[0][st1-1]+mod1)%mod1;
+
+    f2=hsh_1[1][st1+len1-1];
+    if(st1>0)f2=(f2-hsh_1[1][st1-1]+mod2)%mod2;
+
+
+
+    s1=hsh_2[0][st2+len2-1];
+    if(st2>0)
+        s1=(s1-hsh_2[0][st2-1]+mod1)%mod1;
+
+    s2=hsh_2[1][st2+len2-1];
+    if(st2>0)
+        s2=(s2-hsh_2[1][st2-1]+mod2)%mod2;
+
+
+    int dif=abs(st1-st2);
+    if(st1<st2)
+    {
+        f1=(f1*pp[0][dif])%mod1;
+        f2=(f2*pp[1][dif])%mod2;
+    }
+    else if(st1>st2)
+    {
+        s1=(s1*pp[0][dif])%mod1;
+        s2=(s2*pp[1][dif])%mod2;
+    }
+    if(f1==s1&&f2==s2)return 1;
+    return 0;
+}

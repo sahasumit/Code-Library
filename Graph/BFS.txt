@@ -1,0 +1,30 @@
+
+////  BFS for 1D
+
+
+vector<int>G[100];
+void bfs(int n,int src)
+{
+    queue<int>Q;
+    Q.push(src);
+    int taken[100]={0},distance[100];
+    taken [src]=1; 
+        distance [src]=0;
+    while(!Q.empty())
+    {
+        int u=Q.front(); //Q ?? ?????? ???? ???? ???? ??? ?????
+        for(int i=0;i<G[u].size();i++)
+        {
+            int v=G[u][i];
+            if(!taken[v])
+            {
+                distance[v]=distance[u]+1; //?????? ???? v ?? ?????? u ?? ???? ? ????
+                taken[v]=1;
+                Q.push(v);
+            }
+        }
+        Q.pop();
+    }
+    for(int i=1;i<=n;i++)
+        printf("%d to %d distance %d\n",src,i,distance[i]);
+}

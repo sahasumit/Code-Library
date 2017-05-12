@@ -1,0 +1,97 @@
+#include<queue>
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<string>
+using namespace std;
+struct data
+{
+    int u,v,cost;
+    bool operator < ( const data& p ) const   //overloading operator
+    {
+        return cost > p.cost;
+    }
+};
+bool taken[10000+5][10000+5];
+bool color[10000+5];
+vector<int>G[10000+5],weight[10000+5];
+
+long long mst_prems(int src)
+{
+    priority_queue<data>Q;
+    data temp;
+    color[src]=1;
+    for(int i=0; i<G[src].size(); i++)
+    {
+
+        int a,b,c;
+        a=src;
+        b=G[src][i];
+        c=weight[src][i];
+        temp.u=a;
+        temp.v=b;
+        temp.cost=c;
+        Q.push(temp);
+
+
+    }
+    long  long ans=0;
+    while(!Q.empty())
+    {
+        temp=Q.top();
+//
+
+        Q.pop();
+
+        if(!color[temp.v])
+        {
+//cout<<temp.u<<" "<<temp.v<<" "<<temp.cost<<"\n";
+            ans+=temp.cost;
+            color[temp.v]=1;
+            for(int i=0; i<G[temp.v].size(); i++)
+            {
+                data temp2;
+                temp2.u=temp.v;
+                temp2.v=G[temp.v][i];
+                temp2.cost=weight[temp.v][i];
+                Q.push(temp2);
+            }
+
+        }
+    }
+//
+    return ans;
+
+
+}
+
+
+int main()
+{
+    memset(color,false,sizeof color);
+    int node,relation;
+    cin>>node>>relation;
+
+    for(int i=1; i<=relation; i++)
+    {
+        int a,b,c;
+        cin>>a>>b>>c;
+        if(!taken[a][b]&&!taken[b][a])
+        {
+            taken[a][b]=1;
+            taken[b][a]=1;
+            G[a].push_back(b);
+            G[b].push_back(a);
+            weight[a].push_back(c);
+            weight[b].push_back(c);
+
+        }
+
+    }
+    //-----------------//--------------------------------//----------------------//
+    //-------//--------------------//------------------------------//------------//
+    cout<<mst_prems(1)<<"\n";
+}
+
+

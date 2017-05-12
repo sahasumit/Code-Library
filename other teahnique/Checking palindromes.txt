@@ -1,0 +1,13 @@
+
+
+//checking palindromes
+
+bool check_palindromes(string b)
+{
+    string c=b;
+    reverse(c.begin(),c.end());
+    if(c==b)
+        return true;
+    return false;
+
+}
